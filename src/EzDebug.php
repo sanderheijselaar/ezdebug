@@ -719,7 +719,7 @@ Class EzDebug
     {
         foreach ($data as $key => $value) {
             if ('object' === gettype($value)) {
-                $value = print_r_object($value, $depth + 1, $dump_type);
+                $value = self::print_r_object($value, $depth + 1, $dump_type);
                 $value = str_replace("\n", "\n\t", $value);
             } else {
                 if ($dump_type == 1) {
