@@ -5,7 +5,25 @@ For easy debugging without x-debug. Works both in the browser aswel as in the te
 Install the composer package (https://packagist.org/packages/sanderheijselaar/ezdebug)
 or download and include the ezDebug.php file in your project
 
-##Quick Usage
+##Quick usage
+
+	$data1 = array(
+	    'id' => 1,
+	    'name' => 'Sander Heijselaar',
+	    'country' => 'NL'
+	);
+
+	pr($data1, 'Array dump with pr');
+
+Which will output the following:
+
+![Alt text](raw/img/first-example.png?raw=true "First example")
+
+As you can see the data is dumped on screen and when you hover on a dump, it will tell you where the location of this dump is. This way you'll never have to search though your code to find all debug lines. 
+
+##Usage with the Class
+
+The same can be achieved by using the class
 
 	use SanderHeijselaar\EzDebug\EzDebug;
 		
@@ -16,12 +34,6 @@ or download and include the ezDebug.php file in your project
 	);
 
 	EzDebug::pr($data1, 'Array dump with pr');
-
-Which will output the following:
-
-![Alt text](raw/img/first-example.png?raw=true "First example")
-
-As you can see the data is dumped on screen and when you hover on a dump, it will tell you where the location of this dump is. This way you'll never have to search though your code to find all debug lines. 
 
 All methods, except for prdiff & prdiffx will also work on the CLI. 
 
@@ -124,7 +136,18 @@ print the $_SERVER var on the screen
 
 There's no $data parameter because this method is dedicated to the use the $_SERVER as the $data. When no $label is provided, '__SERVER' will be displayed.
  
-![Alt text](raw/img/prsvr-example.png?raw=true "prsvr & prsvrx example")
+###prxml, prxmld & prxmlx
+print formatted XML on the screen
+
+	prxml(
+	    "<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>", 
+	    $label = '', 
+	    $bgcolor = '', 
+	    $color = ''
+	);
+
+ 
+![Alt text](raw/img/prxml-example.png?raw=true "prxml, prxmld & prxmlx example")
  
 ###prta & prtax
 *pr**int the debug data on the screen using a < **t**ext**a**rea >

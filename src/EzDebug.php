@@ -1,11 +1,10 @@
 <?php
 namespace SanderHeijselaar\EzDebug;
-use SanderHeijselaar\EzDebug\Diff;
 
 /**
  * ezDebug is a class for easy debugging without x-debug
  *
- * @version 0.1.0
+ * @version 0.1.2
  */
 Class EzDebug
 {
@@ -27,7 +26,6 @@ Class EzDebug
     const CDarkViolet           = 'DarkViolet';
     const CMaroon               = 'Maroon';
     const CPurple               = 'Purple';
-
     const CAliceBlue            = 'AliceBlue';
     const CAntiqueWhite         = 'AntiqueWhite';
     const CAqua                 = 'Aqua';
@@ -146,17 +144,20 @@ Class EzDebug
 
     const BtFormatCompact =  'compact';
     const BtFormatFull    =  'full';
+
+    protected static $sessionError = 'Session not started! use session_start()';
+
     /**
      * Debug function to display data
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function pr($data, $label = '', $bgcolor = '', $color = '')
+    public static function pr($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color);
+        self::_print_debug($data, $label, $bgColor, $color);
     }
 
     /**
@@ -164,27 +165,26 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prd($data, $label = '', $bgcolor = '', $color = '')
+    public static function prd($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color);
+        self::pr($data, $label, $bgColor, $color);
         @ob_flush();
         @flush();
     }
-
     /**
      * Debug function to display data and flush it directly
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prx($data, $label = '', $bgcolor = '', $color = '')
+    public static function prx($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color);
+        self::pr($data, $label, $bgColor, $color);
         exit();
     }
 
@@ -193,12 +193,12 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prv($data, $label = '', $bgcolor = '', $color = '')
+    public static function prv($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color, 1);
+        self::_print_debug($data, $label, $bgColor, $color, 1);
     }
 
     /**
@@ -206,27 +206,26 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prvd($data, $label = '', $bgcolor = '', $color = '')
+    public static function prvd($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color, 1);
+        self::prv($data, $label, $bgColor, $color);
         @ob_flush();
         @flush();
     }
-
     /**
      * Debug function to display data with var_export and exit directly
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prvx($data, $label = '', $bgcolor = '', $color = '')
+    public static function prvx($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color, 1);
+        self::prv($data, $label, $bgColor, $color);
         exit();
     }
 
@@ -235,13 +234,13 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prhe($data, $label = '', $bgcolor = '', $color = '')
+    public static function prhe($data, $label = '', $bgColor = '', $color = '')
     {
         $data = self::_htmlentities($data);
-        self::pr($data, $label, $bgcolor, $color);
+        self::pr($data, $label, $bgColor, $color);
     }
 
     /**
@@ -249,13 +248,13 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prhex($data, $label = '', $bgcolor = '', $color = '')
+    public static function prhex($data, $label = '', $bgColor = '', $color = '')
     {
         $data = self::_htmlentities($data);
-        self::prx($data, $label, $bgcolor, $color);
+        self::prx($data, $label, $bgColor, $color);
     }
 
     /**
@@ -263,10 +262,10 @@ Class EzDebug
      *
      * @param string $format  The format of the returned data (self::BtFormatCompact, self::BtFormatFull)
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prbt($format = '', $label = '', $bgcolor = '', $color = '')
+    public static function prbt($format = '', $label = '', $bgColor = '', $color = '')
     {
         if (empty($format)) {
             $format = self::BtFormatCompact;
@@ -275,9 +274,13 @@ Class EzDebug
             $label = 'BACKTRACE';
         }
         $data = debug_backtrace();
-        array_shift($data);
+        foreach ($data as $itemIndex => $item) {
+            if (empty($item['file']) || $item['file'] === __FILE__) {
+                unset($data[$itemIndex]);
+            }
+        }
         $data = self::format_debug_backtrace($data, $format);
-        self::pr($data, $label, $bgcolor, $color);
+        self::pr($data, $label, $bgColor, $color);
     }
 
     /**
@@ -285,10 +288,10 @@ Class EzDebug
      *
      * @param string $format  The format of the returned data (self::BtFormatCompact, self::BtFormatFull)
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prbtx($format = '', $label = '', $bgcolor = '', $color = '')
+    public static function prbtx($format = '', $label = '', $bgColor = '', $color = '')
     {
         if (empty($format)) {
             $format = self::BtFormatCompact;
@@ -299,187 +302,187 @@ Class EzDebug
         $data = debug_backtrace();
         array_shift($data);
         $data = self::format_debug_backtrace($data, $format);
-        self::prx($data, $label, $bgcolor, $color);
+        self::prx($data, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_GET data
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prg($label = '', $bgcolor = '', $color = '')
+    public static function prg($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_GET';
         }
-        self::pr($_GET, $label, $bgcolor, $color);
+        self::pr($_GET, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_GET data and exit after it
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prgx($label = '', $bgcolor = '', $color = '')
+    public static function prgx($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_GET';
         }
-        self::prx($_GET, $label, $bgcolor, $color);
+        self::prx($_GET, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_POST data
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prp($label = '', $bgcolor = '', $color = '')
+    public static function prp($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_POST';
         }
-        self::pr($_POST, $label, $bgcolor, $color);
+        self::pr($_POST, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_POST data and exit after it
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prpx($label = '', $bgcolor = '', $color = '')
+    public static function prpx($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_POST';
         }
-        self::prx($_POST, $label, $bgcolor, $color);
+        self::prx($_POST, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_SESSION data
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prs($label = '', $bgcolor = '', $color = '')
+    public static function prs($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_SESSION';
         }
-        self::pr($_SESSION, $label, $bgcolor, $color);
-    }
 
+        self::pr((empty($_SESSION)) ? self::$sessionError : $_SESSION, $label, $bgColor, $color);
+    }
     /**
      * Debug function to display $_SESSION data and exit after it
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prsx($label = '', $bgcolor = '', $color = '')
+    public static function prsx($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_SESSION';
         }
-        self::prx($_SESSION, $label, $bgcolor, $color);
+        self::prx((empty($_SESSION)) ? self::$sessionError : $_SESSION, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_COOKIE data
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prc($label = '', $bgcolor = '', $color = '')
+    public static function prc($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_COOKIE';
         }
-        self::pr($_COOKIE, $label, $bgcolor, $color);
+        self::pr($_COOKIE, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_COOKIE data and exit after it
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prcx($label = '', $bgcolor = '', $color = '')
+    public static function prcx($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_COOKIE';
         }
-        self::prx($_COOKIE, $label, $bgcolor, $color);
+        self::prx($_COOKIE, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_FILES data
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prf($label = '', $bgcolor = '', $color = '')
+    public static function prf($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_FILES';
         }
-        self::pr($_FILES, $label, $bgcolor, $color);
+        self::pr($_FILES, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_FILES data and exit after it
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prfx($label = '', $bgcolor = '', $color = '')
+    public static function prfx($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_FILES';
         }
-        self::prx($_FILES, $label, $bgcolor, $color);
+        self::prx($_FILES, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_SERVER data
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prsvr($label = '', $bgcolor = '', $color = '')
+    public static function prsvr($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_SERVER';
         }
-        self::pr($_SERVER, $label, $bgcolor, $color);
+        self::pr($_SERVER, $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display $_SERVER data and exit after it
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prsvrx($label = '', $bgcolor = '', $color = '')
+    public static function prsvrx($label = '', $bgColor = '', $color = '')
     {
         if (empty($label)) {
             $label = '_SERVER';
         }
-        self::prx($_SERVER, $label, $bgcolor, $color);
+        self::prx($_SERVER, $label, $bgColor, $color);
     }
 
     /**
@@ -487,12 +490,12 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prta($data, $label = '', $bgcolor = '', $color = '')
+    public static function prta($data, $label = '', $bgColor = '', $color = '')
     {
-        self::_print_debug($data, $label, $bgcolor, $color, 2);
+        self::_print_debug($data, $label, $bgColor, $color, 2);
     }
 
     /**
@@ -500,12 +503,12 @@ Class EzDebug
      *
      * @param mixed  $data    The data to display
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prtax($data, $label = '', $bgcolor = '', $color = '')
+    public static function prtax($data, $label = '', $bgColor = '', $color = '')
     {
-        self::prta($data, $label, $bgcolor, $color);
+        self::prta($data, $label, $bgColor, $color);
         exit();
     }
 
@@ -513,112 +516,150 @@ Class EzDebug
      * Debug function to display the line number it's on
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prl($label = '', $bgcolor = '', $color = '')
+    public static function prl($label = '', $bgColor = '', $color = '')
     {
-        $debug_data = debug_backtrace();
-        self::_print_debug($debug_data[0]['line'], $label, $bgcolor, $color);
+        $debug_data = self::getSource();
+        self::_print_debug($debug_data['line'], $label, $bgColor, $color);
     }
 
     /**
      * Debug function to display the line number it's on and flush
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prld($label = '', $bgcolor = '', $color = '')
+    public static function prld($label = '', $bgColor = '', $color = '')
     {
-        $debug_data = debug_backtrace();
-        self::_print_debug($debug_data[0]['line'], $label, $bgcolor, $color);
+        self::prl($label, $bgColor, $color);
         @ob_flush();
         @flush();
     }
-
     /**
      * Debug function to display the line number it's on and exit
      *
      * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prlx($label = '', $bgcolor = '', $color = '')
+    public static function prlx($label = '', $bgColor = '', $color = '')
     {
-        $debug_data = debug_backtrace();
-        self::_print_debug($debug_data[0]['line'], $label, $bgcolor, $color);
+        self::prl($label, $bgColor, $color);
+        exit();
+    }
+
+    public static function prxml($data, $label = '', $bgColor = '', $color = '')
+    {
+        $doc = new \DomDocument('1.0');
+        $doc->preserveWhiteSpace = false;
+        $doc->formatOutput = true;
+        $doc->loadXML($data);
+        self::_print_debug(self::_htmlentities($doc->saveXML()), $label, $bgColor, $color);
+    }
+
+    public static function prxmld($data, $label = '', $bgColor = '', $color = '')
+    {
+        self::prxml($data, $label, $bgColor, $color);
+        @ob_flush();
+        @flush();
+    }
+
+    public static function prxmlx($data, $label = '', $bgColor = '', $color = '')
+    {
+        self::prxml($data, $label, $bgColor, $color);
         exit();
     }
 
     /**
      * Internal debug print function
      *
-     * @param mixed  $data    The data to display
-     * @param string $label   Optional label above the data
-     * @param string $bgcolor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
-     * @param string $color   Option font color. Both #eee and lightgreen are valid input.
+     * @param mixed $data The data to display
+     * @param string $label Optional label above the data
+     * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
+     * @param string $color Option font color. Both #eee and lightgreen are valid input.
+     * @param int $dumpType 0 = print_r, 1 = var_export
      */
-    protected static function _print_debug($data, $label, $bgcolor, $color, $dump_type = 0)
+    protected static function _print_debug($data, $label, $bgColor, $color, $dumpType = 0)
     {
-        if (empty($bgcolor)) {
-            $bgcolor = 'LightGray';
+        if (empty($bgColor)) {
+            $bgColor = 'LightGray';
         }
         if (empty($color)) {
-            $color = self::prgetcolors($bgcolor);
+            $color = self::prgetcolors($bgColor);
         }
 
-        $debug_data = debug_backtrace();
+        $debug_data = self::getSource();
 
-        // CLI
         if (php_sapi_name() == "cli") {
+            // CLI
             if ('object' === gettype($data)) {
-                $var_dump = self::print_r_object($data, $dump_type);
+                $var_dump = self::print_r_object($data, $dumpType);
             } else
-            if ($dump_type === 1) {
-                $var_dump = $var_dump = "\033[32m" . "@" . $debug_data[1]['file'] . ' line ' . $debug_data[1]['line'] . "\n" . "\033[37m";
-                $var_dump .= var_export($data, true) . "\n";
-            } else {
-                $var_dump = $var_dump = "\033[32m" . "@" . $debug_data[1]['file'] . ' line ' . $debug_data[1]['line'] . "\n" . "\033[37m";
-                $var_dump .= print_r($data, true) . "\n";
-            }
+                if ($dumpType === 1) {
+                    $var_dump = $var_dump = "\033[32m" . "@" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . "\033[37m";
+                    $var_dump .= var_export($data, true) . "\n";
+                } else {
+                    $var_dump = $var_dump = "\033[32m" . "@" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . "\033[37m";
+                    $var_dump .= print_r($data, true) . "\n";
+                }
             echo "\n" . $var_dump;
         } else {
             // HTML
             if ('object' === gettype($data)) {
-                $var_dump = self::print_r_object($data, $dump_type);
+                $var_dump = self::print_r_object($data, $dumpType);
             } else
-            if ($dump_type === 1) {
-                $var_dump = var_export($data, true);
-            } else
-            if ($dump_type === 2) {
-                $var_dump = '<textarea>' . var_export($data, true) . '</textarea>';
-            } else {
-                $var_dump = print_r($data, true);
+                if ($dumpType === 1) {
+                    $var_dump = var_export($data, true);
+                } else
+                    if ($dumpType === 2) {
+                        $var_dump = '<textarea>' . var_export($data, true) . '</textarea>';
+                    } else {
+                        $var_dump = print_r($data, true);
+                    }
+            echo "\n" .
+                '<div title="' .
+                $debug_data['file'] .
+                ' line ' .
+                $debug_data['line'] .
+                '" style="font: normal 12px Courier New !important; color: ' .
+                $color .
+                '; border: 1px solid #CCC; background-color: ' .
+                $bgColor .
+                '; padding: 5px; margin: 5px; text-align: left !important; display: inline-block; vertical-align: top;">' .
+                (!empty($label) ? '<strong>' . $label . '</strong>' : '') .
+                '<pre>' . "\n" .
+                $var_dump . "\n" .
+                '</pre></div>';
+        }
+    }
+
+    protected static function getSource()
+    {
+        $data = array('file' => 'UNKNOWN', 'line' => '0');
+        $debug_data = debug_backtrace();
+
+        foreach ($debug_data as $debug_item) {
+            if (empty($debug_item['file']) || $debug_item['file'] === __FILE__) {
+                continue;
             }
 
-            echo "\n" .
-                    '<div title="' .
-                    $debug_data[1]['file'] .
-                    ' line ' .
-                    $debug_data[1]['line'] .
-                    '" style="font: normal 12px Courier New !important; color: ' .
-                    $color .
-                    '; border: 1px solid #CCC; background-color: ' .
-                    $bgcolor .
-                    '; padding: 5px; margin: 5px; text-align: left !important; display: inline-block; vertical-align: top;">' .
-                    (!empty($label) ? '<strong>' . $label . '</strong>' : '') .
-                    '<pre>' . "\n" .
-                    $var_dump . "\n" .
-                    '</pre></div>';
+            $data['file'] = $debug_item['file'];
+            $data['line'] = $debug_item['line'];
+
+            break;
         }
+
+        return $data;
     }
 
     /**
      * Internal debug function to convert preform htmlentities on any data type
      *
-     * @param mixex $data The data that needs to be htmlentities
-     * @return mixex      same type as $data
+     * @param mixed $data The data that needs to be htmlentities
+     * @return mixed      same type as $data
      */
     protected static function _htmlentities($data)
     {
@@ -635,7 +676,7 @@ Class EzDebug
                 $data->$key = self::_htmlentities($value);
             }
         } else {
-            exit('UNKNOWN DATA TYPE (' . gettype($data)) . ') IN DEBUG FUNCTION ' . __FUNCTION__ . ', ' . __FILE__ . ' line ' . __LINE__;
+            exit('UNKNOWN DATA TYPE (' . gettype($data) . ') IN DEBUG FUNCTION ' . __FUNCTION__ . ', ' . __FILE__ . ' line ' . __LINE__);
         }
 
         return $data;
@@ -650,13 +691,11 @@ Class EzDebug
      */
     protected static function format_debug_backtrace($data, $format)
     {
-
         if (self::BtFormatFull == $format) {
             // Leave data as it is
         } else {
             // Default formatting self::BtFormatCompact
             foreach ($data as &$line) {
-                $target = '';
                 if (!empty($line['function']) && 'include' == $line['function'] && !empty($line['args'][0])) {
                     $target = $line['function'] . '(' . $line['args'][0] . ')';
                 } else {
@@ -689,9 +728,9 @@ Class EzDebug
      */
     public static function prfile($filename, $data)
     {
-        $debug_data = debug_backtrace();
+        $debug_data = self::getSource();
         $data = print_r($data, true);
-        file_put_contents($filename, "-----------------------------------------\n" . date("H:i:s") . "\t" . $debug_data[0]['file'] . ' line ' . $debug_data[0]['line'] . "\n" . $data . "\n");
+        file_put_contents($filename, "-----------------------------------------\n" . date("H:i:s") . "\t" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . $data . "\n");
     }
 
     /**
@@ -702,11 +741,10 @@ Class EzDebug
      */
     public static function prfilea($filename, $data)
     {
-        $debug_data = debug_backtrace();
+        $debug_data = self::getSource();
         $data = print_r($data, true);
-        file_put_contents($filename, "-----------------------------------------\n" . date("H:i:s") . "\t" . $debug_data[0]['file'] . ' line ' . $debug_data[0]['line'] . "\n" . $data . "\n", FILE_APPEND);
+        file_put_contents($filename, "-----------------------------------------\n" . date("H:i:s") . "\t" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . $data . "\n", FILE_APPEND);
     }
-
     /**
      * Function to create the print_r functionality for objects
      *
@@ -715,7 +753,7 @@ Class EzDebug
      * @param  int    $dump_type 0 = print_r, 1 = var_export
      * @return string            The dumped data
      */
-    protected static function print_r_object($data, $depth = 1, $dump_type = false)
+    protected static function print_r_object($data, $depth = 1, $dump_type = 0)
     {
         foreach ($data as $key => $value) {
             if ('object' === gettype($value)) {
@@ -728,8 +766,6 @@ Class EzDebug
                     $value = print_r($value, true);
                 }
             }
-
-
             $data->$key = $value;
         }
 
@@ -739,7 +775,6 @@ Class EzDebug
     public static function prcolors()
     {
         $colors = self::prgetcolors();
-
         foreach ($colors as $textColor => $textBackgroundColors) {
             foreach ($textBackgroundColors as $textBackgroundColor) {
                 self::prd('EzDebug::C' . $textBackgroundColor, '', $textBackgroundColor, $textColor);
@@ -904,20 +939,188 @@ Class EzDebug
         return 'black';
     }
 
-    public static function prdiff($data1, $data2, $label = '', $bgcolor = '', $color = '')
+    public static function prdiff($data1, $data2, $label = '', $bgColor = '', $color = '')
     {
         echo '<style>
             div.diff del {background-color: lightcoral; text-decoration: none;}
             div.diff ins {background-color: lightgreen; text-decoration: none;}
             </style>';
 
-        self::_print_debug('<div class="diff">' . Diff::toHTML(Diff::compare(var_export($data1, true), var_export($data2, true))) . '</div>', $label, $bgcolor, $color);
+        self::_print_debug('<div class="diff">' . Diff::toHTML(Diff::compare(var_export($data1, true), var_export($data2, true))) . '</div>', $label, $bgColor, $color);
     }
 
-    public static function prdiffx($data1, $data2, $label = '', $bgcolor = '', $color = '')
+    public static function prdiffx($data1, $data2, $label = '', $bgColor = '', $color = '')
     {
-        self::prdiff($data1, $data2, $label, $bgcolor, $color);
+        self::prdiff($data1, $data2, $label, $bgColor, $color);
         exit();
     }
+}
 
+/**
+ * Make all method accessible without the class name
+ */
+if (! function_exists('pr')) {
+    function pr($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::pr($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prd')) {
+    function prd($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prd($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prx')) {
+    function prx($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prx($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prv')) {
+    function prv($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prv($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prvd')) {
+    function prvd($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prvd($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prvx')) {
+    function prvx($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prvx($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prhe')) {
+    function prhe($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prhe($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prhex')) {
+    function prhex($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prhex($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prbt')) {
+    function prbt($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prbt($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prbtx')) {
+    function prbtx($format, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prbtx($format, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prg')) {
+    function prg($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prg($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prgx')) {
+    function prgx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prgx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prp')) {
+    function prp($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prp($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prpx')) {
+    function prpx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prpx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prs')) {
+    function prs($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prs($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prsx')) {
+    function prsx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prsx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prc')) {
+    function prc($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prc($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prcx')) {
+    function prcx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prcx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prf')) {
+    function prf($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prf($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prfx')) {
+    function prfx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prfx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prsvr')) {
+    function prsvr($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prsvr($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prsvrx')) {
+    function prsvrx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prsvrx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prta')) {
+    function prta($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prta($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prtax')) {
+    function prtax($format, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prtax($format, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prl')) {
+    function prl($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prl($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prld')) {
+    function prld($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prld($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prlx')) {
+    function prlx($label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prlx($label, $bgColor, $color);
+    }
+}
+if (! function_exists('prxml')) {
+    function prxml($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prxml($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prxmlx')) {
+    function prxmlx($data, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prxmlx($data, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prfile')) {
+    function prfile($filename, $data) {
+        \SanderHeijselaar\EzDebug\EzDebug::prfile($filename, $data);
+    }
+}
+if (! function_exists('prfilea')) {
+    function prfilea($filename, $data) {
+        \SanderHeijselaar\EzDebug\EzDebug::prfilea($filename, $data);
+    }
+}
+if (! function_exists('prdiff')) {
+    function prdiff($data1, $data2, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prdiff($data1, $data2, $label, $bgColor, $color);
+    }
+}
+if (! function_exists('prdiffx')) {
+    function prdiffx($data1, $data2, $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prdiffx($data1, $data2, $label, $bgColor, $color);
+    }
 }

@@ -90,6 +90,8 @@ EzDebug::prl('Dump the line number');
 //EzDebug::prld();
 //EzDebug::prlx();
 
+EzDebug::prxml("<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>", 'XML formatted');
+
 // prfile & prfilea Dump to file
 EzDebug::prfile("/tmp/ezdebug.log", $_SERVER);
 EzDebug::prd(file_get_contents("/tmp/ezdebug.log"));
