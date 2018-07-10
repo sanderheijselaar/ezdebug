@@ -4,7 +4,7 @@ namespace SanderHeijselaar\EzDebug;
 /**
  * ezDebug is a class for easy debugging without x-debug
  *
- * @version 0.1.2
+ * @version 0.1.3
  */
 Class EzDebug
 {
@@ -265,7 +265,7 @@ Class EzDebug
      * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prbt($format = '', $label = '', $bgColor = '', $color = '')
+    public static function prbt($format = 'compact', $label = '', $bgColor = '', $color = '')
     {
         if (empty($format)) {
             $format = self::BtFormatCompact;
@@ -291,7 +291,7 @@ Class EzDebug
      * @param string $bgColor Optional alternative bgcolor. Both #eee and lightgreen are valid input.
      * @param string $color   Option font color. Both #eee and lightgreen are valid input.
      */
-    public static function prbtx($format = '', $label = '', $bgColor = '', $color = '')
+    public static function prbtx($format = 'compact', $label = '', $bgColor = '', $color = '')
     {
         if (empty($format)) {
             $format = self::BtFormatCompact;
@@ -595,14 +595,13 @@ Class EzDebug
 
         if (php_sapi_name() == "cli") {
             // CLI
+            $var_dump = $var_dump = "\033[32m" . "@" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . "\033[37m";
             if ('object' === gettype($data)) {
-                $var_dump = self::print_r_object($data, $dumpType);
+                $var_dump .= self::print_r_object($data, $dumpType);
             } else
                 if ($dumpType === 1) {
-                    $var_dump = $var_dump = "\033[32m" . "@" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . "\033[37m";
                     $var_dump .= var_export($data, true) . "\n";
                 } else {
-                    $var_dump = $var_dump = "\033[32m" . "@" . $debug_data['file'] . ' line ' . $debug_data['line'] . "\n" . "\033[37m";
                     $var_dump .= print_r($data, true) . "\n";
                 }
             echo "\n" . $var_dump;
@@ -705,6 +704,12 @@ Class EzDebug
                 if (empty($line['file']) && empty($line['class']) === false) {
                     $line = array(
                         'source' => $line['class'] . ':' . $line['function'],
+                        'target' => $target,
+                    );
+                } else
+                if (empty($line['file'])) {
+                    $line = array(
+                        'source' => $line['function'],
                         'target' => $target,
                     );
                 } else {
@@ -941,12 +946,30 @@ Class EzDebug
 
     public static function prdiff($data1, $data2, $label = '', $bgColor = '', $color = '')
     {
-        echo '<style>
+        if (php_sapi_name() == "cli") {
+            // CLI
+            $data = Diff::toString(Diff::compare(var_export($data1, true), var_export($data2, true)));
+            $data = explode("\n", $data);
+            foreach ($data as &$line) {
+                if (substr($line, 0, 2) === '- ') {
+                    $line = "\033[31m" . $line . "\033[37m";
+                }else
+                if (substr($line, 0, 2) === '+ ') {
+                    $line = "\033[32m" . $line . "\033[37m";
+                }
+
+            }
+            unset($line);
+            $data = implode("\n", $data);
+            self::_print_debug($data, $label, $bgColor, $color);
+        } else {
+            echo '<style>
             div.diff del {background-color: lightcoral; text-decoration: none;}
             div.diff ins {background-color: lightgreen; text-decoration: none;}
             </style>';
 
-        self::_print_debug('<div class="diff">' . Diff::toHTML(Diff::compare(var_export($data1, true), var_export($data2, true))) . '</div>', $label, $bgColor, $color);
+            self::_print_debug('<div class="diff">' . Diff::toHTML(Diff::compare(var_export($data1, true), var_export($data2, true))) . '</div>', $label, $bgColor, $color);
+        }
     }
 
     public static function prdiffx($data1, $data2, $label = '', $bgColor = '', $color = '')
@@ -1000,12 +1023,12 @@ if (! function_exists('prhex')) {
     }
 }
 if (! function_exists('prbt')) {
-    function prbt($data, $label = '', $bgColor = '', $color = '') {
-        \SanderHeijselaar\EzDebug\EzDebug::prbt($data, $label, $bgColor, $color);
+    function prbt($format='', $label = '', $bgColor = '', $color = '') {
+        \SanderHeijselaar\EzDebug\EzDebug::prbt($format, $label, $bgColor, $color);
     }
 }
 if (! function_exists('prbtx')) {
-    function prbtx($format, $label = '', $bgColor = '', $color = '') {
+    function prbtx($format='', $label = '', $bgColor = '', $color = '') {
         \SanderHeijselaar\EzDebug\EzDebug::prbtx($format, $label, $bgColor, $color);
     }
 }
